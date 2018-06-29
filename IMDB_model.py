@@ -13,6 +13,7 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.models import Sequential
 from keras.layers import Dense, Flatten, LSTM, Conv1D, MaxPooling1D, Dropout, Activation
 from keras.layers.embeddings import Embedding
+import sys
 
 
 path_data = 'IMDB_reviews.csv'
@@ -21,6 +22,7 @@ embedding_dim = 100
 max_length = 200
 split_percentage = 80 
 
+csv.field_size_limit(sys.maxsize)
 file = codecs.open(path_data, "r",encoding='utf-8', errors='ignore')
 full_data = list(csv.reader(file, delimiter=','))
 full_data = np.array(full_data)
