@@ -15,10 +15,10 @@ from keras.layers import Dense, Flatten, LSTM, Conv1D, MaxPooling1D, Dropout, Ac
 from keras.layers.embeddings import Embedding
 
 
-path_data = 'sentiment_data1.csv'
+path_data = 'IMDB_reviews.csv'
 path_embedding = 'glove.6B.100d.txt'
 embedding_dim = 100
-max_length = 60
+max_length = 200
 split_percentage = 80 
 
 file = codecs.open(path_data, "r",encoding='utf-8', errors='ignore')
@@ -26,13 +26,14 @@ full_data = list(csv.reader(file, delimiter=','))
 full_data = np.array(full_data)
 
 #Creating a labels numpy array 
-labels = full_data[:, 0]
+labels = full_data[1:, 3]
+labels = (labels == 'pos')
+labels = labels.astype(int)
 
 #Separating out the tweets/text 
-text_data = full_data[:, 5]
+text_data = full_data[1:, 2]
 
 split = int((split_percentage*full_data.shape[0])/100)
-print (full_data.shape[0])
 
 table = str.maketrans('', '', string.punctuation)
 porter = PorterStemmer()
@@ -42,9 +43,6 @@ data = []
 words = []
 for i in range(0, text_data.shape[0]) : 
 	words = text_data[i].split()
-	split_first_word = list(words[0])
-	if (split_first_word[0] == '@') : 
-		del words[0]
 	stripped_words = [w.translate(table) for w in words]
 	lowercase_words = [w.lower() for w in stripped_words]
 	stemmed_words = [porter.stem(w) for w in lowercase_words]
