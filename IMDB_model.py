@@ -6,6 +6,7 @@ import nltk
 import codecs
 import csv
 import string
+from tensorflow import keras
 from nltk.stem.porter import PorterStemmer 
 from nltk.stem import WordNetLemmatizer
 from keras.preprocessing.text import Tokenizer
@@ -13,7 +14,7 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.models import Sequential
 from keras.layers import Dense, Flatten, LSTM, Conv1D, MaxPooling1D, Dropout, Activation
 from keras.layers.embeddings import Embedding
-import sys
+import sys 
 
 
 path_data = 'IMDB_reviews.csv'
@@ -26,6 +27,7 @@ csv.field_size_limit(sys.maxsize)
 file = codecs.open(path_data, "r",encoding='utf-8', errors='ignore')
 full_data = list(csv.reader(file, delimiter=','))
 full_data = np.array(full_data)
+
 
 #Creating a labels numpy array 
 labels = full_data[1:, 3]
@@ -63,6 +65,8 @@ tokenizer.fit_on_texts(df['text'])
 num_seq = tokenizer.texts_to_sequences(df['text'])
 final_seq = pad_sequences(num_seq, maxlen= max_length)
 
+keras.utils.to_categorical(labels, num_classes=2)
+
 training_seq = final_seq[:split, :]
 test_seq = final_seq[split:, :]
 
@@ -89,7 +93,7 @@ model.add(Embedding(vocab_length, embedding_dim, input_length=max_length, weight
 model.add(LSTM(embedding_dim, dropout=0.2, recurrent_dropout=0.2))
 model.add(Dense(1, activation='sigmoid'))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-model.fit(training_seq, np.array(training_labels), validation_split=0.4, epochs=30)
+model.fit(training_seq, np.array(training_labels), validation_split=0.4, epochs=10)
 model.summary()
 scores = model.evaluate(test_seq, test_labels)
 
