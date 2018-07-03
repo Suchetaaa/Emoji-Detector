@@ -10,7 +10,7 @@ import math
 
 def converting_into_one_label(dataset):
 
-
+	
 	#extracting column 
 	Valence1 = dataset['Valence1']
 	Valence2 = dataset['Valence2']
@@ -45,7 +45,7 @@ def converting_into_one_label(dataset):
 				label1.append(3) #here Three resemble Happy
 
 		i = i+1
-	end
+	#end
 
 	#stackinng and conerting into column
 	emotions1 = np.asarray(label1)
@@ -79,7 +79,7 @@ def converting_into_one_label(dataset):
 				label2.append(3) #here Three resemble Happy
 
 		i = i+1
-	end
+	#end
 
 
 	emotions2 = np.asarray(label2)
@@ -95,7 +95,7 @@ def converting_into_one_label(dataset):
 		
 		emoji.append(avg)
 		i = i+1
-	end
+	#end
 
 	y_data  = np.asarray(emoji)
 	y_data = np.vstack(y_data)
@@ -104,13 +104,19 @@ def converting_into_one_label(dataset):
 		
 		y_data[i]  = math.ceil(y_data[i])
 		i = i+1
-	end
+	#end
 		
-	print y_data
-	return y_data
+	#adding new column to the existing csv file as Lables which store y_data
+	df = pd.read_csv("dataset-fb-valence-arousal-anon.csv")
+	df['labels'] = y_data
+	#print(df)
+	df.to_csv('dataset-fb-valence-arousal-anon.csv')
 
 
+	print df[5]
 
+	#print df
+	return df
 
 data = pd.read_csv("dataset-fb-valence-arousal-anon.csv")
 x = converting_into_one_label(data)
