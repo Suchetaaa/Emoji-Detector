@@ -113,10 +113,18 @@ def converting_into_one_label(dataset):
 	df.to_csv('dataset-fb-valence-arousal-anon.csv')
 
 
-	print df[5]
+	#print df[5]
 
 	#print df
-	return df
+
+	keep_df = ["Anonymized Message" , "labels"]
+
+	new_dataset = df[keep_df]
+
+	new_dataset.to_csv("new_dataset.csv", index = False)
+
+	print new_dataset
+	return new_dataset
 
 data = pd.read_csv("dataset-fb-valence-arousal-anon.csv")
 x = converting_into_one_label(data)
