@@ -1,1 +1,2 @@
-# Soc-emoji_detector
+# Emoji Predictor
+
